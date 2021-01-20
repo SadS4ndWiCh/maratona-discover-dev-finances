@@ -1,6 +1,15 @@
 /* Global ==================================== */
 :root {
+    --primary-purple: #bb86fc;
+    --dark-primary: #1f1b24;
+    --dark-gray: #121212;
     --dark-blue: #363f5f;
+
+    --light-primary: #f0f2f5;
+    --dark-green: #2d4a22;
+
+    --color-expense: #e92929;
+    --color-income: #49aa26;
 }
 
 * {
@@ -12,7 +21,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;    
-    background-color: #f0f2f5;
+    background-color: var(--dark-primary);
 }
 
 .container {
@@ -29,7 +38,7 @@ h2 {
 
     font-weight: normal;
 
-    color: var(--dark-blue);
+    color: #fff;
 }
 
 /* Header ==================================== */
@@ -38,13 +47,17 @@ header {
     padding: 2rem 0 10rem;
 
     text-align: center;
-    background-color: #2d4a22;
+    background-color: var(--dark-gray);
 }
 
 #logo {
     font-weight: 100;
 
     color: #fff;
+}
+
+#logo span {
+    color: var(--primary-purple);
 }
 
 /* Balance ==================================== */
@@ -55,8 +68,6 @@ header {
 
 #balance h2 {
     margin-top: 0;
-
-    color: #fff;
 }
 
 .card {
@@ -65,7 +76,7 @@ header {
 
     border-radius: .25rem;
 
-    color: var(--dark-blue);
+    color: var(--dark-gray);
     background-color: #fff;
 }
 
@@ -79,9 +90,12 @@ header {
     line-height: 3rem;
 }
 
+.card.expenses {
+    background-color: var(--color-expense);
+}
+
 .card.total {
-    color: #fff;
-    background-color: #49aa26;
+    background-color: var(--color-income);
 }
 
 /* Table ==================================== */
@@ -100,13 +114,13 @@ table th {
     font-weight: normal;
     text-align: left;
 
-    background-color: #fff;
+    background-color: var(--dark-gray);
 }
 
 table td {
     padding: 1rem 2rem;
 
-    background-color: #fff;
+    background-color: var(--dark-gray);
 }
 
 table tbody tr {
@@ -128,11 +142,11 @@ td.description {
 }
 
 td.income {
-    color: #12a454;
+    color: var(--color-income);
 }
 
 td.expense {
-    color: #e92929;
+    color: var(--color-expense);
 }
 
 
