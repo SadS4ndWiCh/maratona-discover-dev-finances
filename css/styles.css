@@ -1,19 +1,68 @@
-/* Global ==================================== */
 :root {
-    /* --primary-purple: #bb86fc; */
-    --dark-primary: #1f1b24;
+    /* Some colors */
+    --dark-medium-gray: #1f1b24;
     --dark-gray: #121212;
-    --light-gray: #969cb3;
     --dark-blue: #363f5f;
+    --light-gray: #969cb3;
+    --medium-white: #f0f2f5;
+    --green: #49aa26;
+    --dark-green: #2d4a22;
+    --red: #B42424;
 
-    --light-primary: #f0f2f5;
-    /* --dark-green: #2d4a22; */
-
-    --color-expense: #e92929;
-    --color-income: #49aa26;
-
-    --red: #e92929;
+    /* Default Theme */
+    --global-bg-color: var(--medium-white);
+    --global-header-bg-color: var(--dark-green);
+    
+    --global-link-color: var(--dark-green);
+    --global-text-color: var(--dark-blue);
+    --global-title-color: var(--dark-blue);
+    --global-input-bg-color: white;
+    --global-input-color: var(--dark-gray);
+    
+    --global-save-button-bg-color: var(--green);
+    --global-save-button-color: white;
+    --global-cancel-button-brd-color: var(--red);
+    --global-cancel-button-color: var(--red);
+    
+    --global-card-bg-color: white;
+    --global-total-color: white;
+    
+    --global-table-bg-color: white;
+    --global-table-h-color: var(--light-gray);
+    --global-table-desc-color: var(--dark-blue);
+    --global-table-val-in-color: #12a454;
+    --global-table-val-ex-color: #e92929;
+    --global-table-day-color: var(--light-gray);
+    
+    --global-modal-bg-color: var(--medium-white);
+    --global-modal-label-color: var(--dark-blue);
 }
+
+/* Themes ==================================== */
+
+/* Dark Theme */
+html[data-theme="dark"] {
+    --global-bg-color: var(--dark-medium-gray);
+    --global-header-bg-color: var(--dark-gray);
+    
+    --global-link-color: var(--light-gray);
+    --global-text-color: var(--dark-blue);
+    --global-title-color: white;
+    --global-input-bg-color: var(--dark-medium-gray);
+    --global-input-color: var(--light-gray);
+    --global-save-button-color: var(--dark-gray);
+
+    --global-card-bg-color: var(--dark-medium-gray);
+    --global-card-color: var(--medium-white);
+    --global-total-color: var(--dark-gray);
+
+    --global-table-bg-color: var(--dark-gray);
+
+    --global-modal-bg-color: var(--dark-gray);
+    --global-modal-label-color: var(--medium-white);
+}
+
+/* Global ==================================== */
 
 * {
     padding: 0;
@@ -24,11 +73,17 @@
 
 html {
     font-size: 93.75%;
+
+    transition: all 1s;
+}
+
+html[data-theme="dark"] .theme-switch {
+    transform: scaleX(-1);
 }
 
 body {
     font-family: 'Poppins', sans-serif;    
-    background-color: var(--dark-primary);
+    background-color: var(--global-bg-color);
 }
 
 .sr-only {
@@ -61,18 +116,18 @@ h2 {
 
     font-weight: normal;
 
-    color: #fff;
+    color: var(--global-title-color);
 }
 
 /* Links and Buttons ==================================== */
 
 a {
-    color: var(--dark-blue);
+    color: var(--global-link-color);
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--dark-blue);
+    color: var(--global-link-color);
 }
 
 button {
@@ -83,7 +138,7 @@ button {
     border-radius: .2rem;
 
     color: var(--light-primary);
-    background-color: var(--color-income);
+    background-color: var(--global-save-button-bg-color);
 
     cursor: pointer;
 }
@@ -95,7 +150,6 @@ button:hover {
 
     margin-bottom: .8rem;
 
-    color: var(--light-gray);
     opacity: .7;
 }
 
@@ -110,10 +164,10 @@ a.button.cancel {
 
     height: 50px;
 
-    border: 2px solid var(--red);
+    border: 2px solid var(--global-cancel-button-brd-color);
     border-radius: .25rem;
 
-    color: var(--red);
+    color: var(--global-cancel-button-color);
 
     opacity: .6;
 }
@@ -128,7 +182,30 @@ header {
     padding: 2rem 0 10rem;
 
     text-align: center;
-    background-color: var(--dark-gray);
+    background-color: var(--global-header-bg-color);
+}
+
+header .theme-switch {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 1rem;
+
+    border-radius: 50%;
+
+    opacity: .5;
+    cursor: pointer;
+}
+
+header .theme-switch:hover {
+    background-color: rgba(255, 255, 255, .02);
 }
 
 #logo {
@@ -157,8 +234,8 @@ header {
 
     border-radius: .25rem;
 
-    color: var(--dark-gray);
-    background-color: #fff;
+    color: var(--global-card-color);
+    background-color: var(--global-card-bg-color);
 
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
 }
@@ -177,18 +254,14 @@ header {
     line-height: 3rem;
 
 }
-.card.incomes {
-    color: var(--light-primary);
-    background-color: var(--dark-primary);
-
-}
-
-.card.expenses {
-    background-color: var(--color-expense);
-}
 
 .card.total {
-    background-color: var(--color-income);
+    color: var(--global-total-color);
+    background-color: var(--green);
+}
+
+html[data-theme="light"] .card.total img {
+    filter: invert(1);
 }
 
 /* Table ==================================== */
@@ -213,13 +286,13 @@ table th {
     font-weight: normal;
     text-align: left;
 
-    background-color: var(--dark-gray);
+    background-color: var(--global-table-bg-color);
 }
 
 table td {
     padding: 1rem 2rem;
 
-    background-color: var(--dark-gray);
+    background-color: var(--global-table-bg-color);
 }
 
 table tbody tr {
@@ -247,11 +320,11 @@ td.description {
 }
 
 td.income {
-    color: var(--color-income);
+    color: var(--global-table-val-in-color);
 }
 
 td.expense {
-    color: var(--color-expense);
+    color: var(--global-table-val-ex-color);
 }
 
 
@@ -301,7 +374,7 @@ footer {
 
     border-radius: .25rem;
 
-    background-color: var(--dark-gray);
+    background-color: var(--global-modal-bg-color);
 }
 
 /* Form ==================================== */
@@ -322,13 +395,13 @@ input {
     border: none;
     border-radius: .2rem;
 
-    color: var(--light-primary);
-    background-color: var(--dark-primary);
+    color: var(--global-input-color);
+    background-color: var(--global-input-bg-color);
 }
 
 input,
 input::placeholder {
-    color: var(--light-gray);
+    color: var(--global-input-color);
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -336,7 +409,7 @@ input[type="number"]::-webkit-outer-spin-button {
     appearance: none;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
+html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
@@ -347,14 +420,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .input-group label {
     font-size: .8rem;
 
-    color: var(--light-primary);
+    color: var(--global-modal-label-color);
     opacity: .9;
 }
 
 .input-group small {
-    color: var(--light-primary);
+    color: var(--global-modal-label-color);
 
-    opacity: .7;
+    opacity: .8;
 }
 
 .input-group.actions {
@@ -371,7 +444,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .input-group.actions button {
     font-weight: bold;
 
-    color: var(--dark-gray);
+    color: var(--global-save-button-color);
 }
 
 /* Responsive ==================================== */
