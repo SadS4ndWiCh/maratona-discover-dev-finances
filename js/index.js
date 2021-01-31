@@ -122,7 +122,12 @@ const Transaction = {
 // Métodos para manipular os dados visíveis
 const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
-  
+
+  transactionsPageButtons: document.querySelector('#table-pages-buttons'),
+  transactionsCurrentPage: 2,
+  transactionsPerPage: 6,
+  transactionsPageOffset: 5,
+
   balanceIncomeDisplay: document.querySelector('#income-display'),
   balanceExpenseDisplay: document.querySelector('#expense-display'),
   balanceTotalDisplay: document.querySelector('#total-display'),
@@ -161,6 +166,73 @@ const DOM = {
 
   clearTransactions() {
     DOM.transactionsContainer.innerHTML = '';
+  },
+
+  transactionsPaginate() {
+    const currentPage = DOM.transactionsCurrentPage;
+    const totalPage = Math.ceil(Transaction.all.length / DOM.transactionsPerPage);
+    const firstIndex = (currentPage - 1) * DOM.transactionsPerPage;
+    const lastIndex = firstIndex + DOM.transactionsPerPage;
+
+    return {
+      data: Transaction.all.slice(firstIndex, lastIndex),
+      currentPage,
+      totalPage,
+    }
+  },
+
+  renderTransactions() {
+    const { data, totalPage } = DOM.transactionsPaginate();
+    DOM.clearTransactions();
+    
+    data.forEach(DOM.addTransaction);
+    DOM.createPaginationButtons(totalPage);
+  },
+
+  createPaginationButtons(pages) {
+    const {
+      transactionsCurrentPage: currentPage,
+      transactionsPageOffset: pageOffset,
+      transactionsPageButtons: pageButtons,
+    } = DOM;
+
+    pageButtons.innerHTML = '';
+
+    let maxLeft = (currentPage - Math.floor(pageOffset / 2));
+    let maxRight = (currentPage + Math.floor(pageOffset / 2));
+    if(maxLeft < 1) {
+      maxLeft = 1;
+      maxRight = pageOffset;
+    }
+
+    if(maxRight > pages) {
+      maxLeft = pages - (pageOffset - 1)
+      maxRight = pages;
+    
+      if(maxLeft < 1) {
+        maxLeft = 1;
+      }
+    }
+
+    for (let page = maxLeft; page <= maxRight; page++) {
+      pageButtons.innerHTML += `
+        <button value="${page}" class="page ${page === currentPage ? 'current' : ''}" onclick="DOM.goToPage(this.value)">${page}</button>
+      `
+    }
+
+    if(currentPage != 1) {
+      pageButtons.innerHTML = `<button value="1" class="page" onclick="DOM.goToPage(this.value)">&#171; First</button>` + pageButtons.innerHTML;
+    }
+
+    if(currentPage != pages) {
+      pageButtons.innerHTML += `<button value="${pages}" class="page" onclick="DOM.goToPage(this.value)">Last &#187;</button>`;
+    }
+  },
+
+  goToPage(page) {
+    DOM.transactionsCurrentPage = Number(page);
+
+    DOM.renderTransactions();
   }
 };
 
@@ -260,7 +332,7 @@ const Form = {
 // Métodos para manipular as funcionalidades do app em si
 const App = {
   init() {
-    Transaction.all.forEach(DOM.addTransaction);
+    DOM.renderTransactions();
     DOM.updateBalance();
 
     Storage.set(Transaction.all);
