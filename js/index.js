@@ -1,10 +1,20 @@
 // Manipular o Modal
 const Modal = {
+  modalHtml: document.querySelector('.modal-overlay'),
+
   toggle() {
     // Abrir o modal caso esteja fechado
     // e fechar o modal caso esteja aberto
-    document.querySelector('.modal-overlay').classList.toggle('active');
+    Modal.modalHtml.classList.toggle('active');
   },
+
+  open() {
+    Modal.modalHtml.classList.add('active');
+  },
+
+  close() {
+    Modal.modalHtml.classList.remove('active');
+  }
 }
 
 // Manipular os Temas do site
@@ -238,6 +248,7 @@ const Form = {
       Transaction.add(transaction);
 
       Form.clearFields();
+      Modal.close();
 
     } catch(error) {
       alert(error.message);
