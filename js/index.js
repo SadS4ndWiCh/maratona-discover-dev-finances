@@ -124,7 +124,7 @@ const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
 
   transactionsPageButtons: document.querySelector('#table-pages-buttons'),
-  transactionsCurrentPage: 2,
+  transactionsCurrentPage: 1,
   transactionsPerPage: 6,
   transactionsPageOffset: 5,
 
@@ -132,6 +132,7 @@ const DOM = {
   balanceExpenseDisplay: document.querySelector('#expense-display'),
   balanceTotalDisplay: document.querySelector('#total-display'),
 
+  // Adiciona uma transação na tabela
   addTransaction(transaction, index) {
     const tr = document.createElement('tr');
     tr.innerHTML = DOM.innerHTMLTransaction(transaction, index);
@@ -140,6 +141,7 @@ const DOM = {
     DOM.transactionsContainer.appendChild(tr);
   },
 
+  // Cria a row da transação
   innerHTMLTransaction({ description, amount, date, type }, index) {
     const html = `
       <td class="description">${description}</td>
@@ -153,6 +155,7 @@ const DOM = {
     return html;
   },
 
+  // Atualiza os cards
   updateBalance() {
     // Atualiza a Entrada
     DOM.balanceIncomeDisplay.innerHTML = Utils.formatCurrency(Transaction.incomes());
@@ -164,10 +167,21 @@ const DOM = {
     DOM.balanceTotalDisplay.innerHTML = Utils.formatCurrency(Transaction.total());
   },
 
+  // Remove todas transações da tabela
   clearTransactions() {
     DOM.transactionsContainer.innerHTML = '';
   },
 
+  // Adiciona todas as transações na tabela
+  renderTransactions() {
+    const { data, totalPage } = DOM.transactionsPaginate();
+    DOM.clearTransactions();
+    
+    data.forEach(DOM.addTransaction);
+    DOM.createPaginationButtons(totalPage);
+  },
+
+  // Pega as transações correspondente a página
   transactionsPaginate() {
     const currentPage = DOM.transactionsCurrentPage;
     const totalPage = Math.ceil(Transaction.all.length / DOM.transactionsPerPage);
@@ -181,15 +195,10 @@ const DOM = {
     }
   },
 
-  renderTransactions() {
-    const { data, totalPage } = DOM.transactionsPaginate();
-    DOM.clearTransactions();
-    
-    data.forEach(DOM.addTransaction);
-    DOM.createPaginationButtons(totalPage);
-  },
-
+  // Cria os botões das páginas
   createPaginationButtons(pages) {
+    if(pages === 0) return
+
     const {
       transactionsCurrentPage: currentPage,
       transactionsPageOffset: pageOffset,
@@ -229,6 +238,7 @@ const DOM = {
     }
   },
 
+  // Move para outra página da tabela
   goToPage(page) {
     DOM.transactionsCurrentPage = Number(page);
 
@@ -238,6 +248,7 @@ const DOM = {
 
 // Métodos utilitários
 const Utils = {
+  // Formata a quantia de dinheiro em R$
   formatCurrency(value) {
     const signal = Number(value) < 0 ? '-' : '';
     
@@ -251,10 +262,12 @@ const Utils = {
     return `${signal} ${value}`;
   },
 
+  // Formata o valor recebido no formulário
   formatAmount(value) {
     return Number(value) * 100;
   },
 
+  // Formata a data recebida no formulário
   formatDate(date) {
     const [year, mounth, day] = date.split('-');
 
