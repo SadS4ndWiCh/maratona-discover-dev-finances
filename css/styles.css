@@ -327,6 +327,9 @@ td.expense {
     color: var(--global-table-val-ex-color);
 }
 
+td img:hover {
+    cursor: pointer;
+}
 
 /* Footer ==================================== */
 
