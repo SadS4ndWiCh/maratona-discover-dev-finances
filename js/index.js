@@ -264,7 +264,7 @@ const Utils = {
 
   // Formata o valor recebido no formulário
   formatAmount(value) {
-    return Number(value) * 100;
+    return Math.round(Number(value) * 100);
   },
 
   // Formata a data recebida no formulário
