@@ -175,6 +175,7 @@ const DOM = {
   // Adiciona todas as transações na tabela
   renderTransactions() {
     const { data, totalPage } = DOM.transactionsPaginate();
+    console.log(totalPage);
     DOM.clearTransactions();
     
     data.forEach(DOM.addTransaction);
@@ -197,8 +198,6 @@ const DOM = {
 
   // Cria os botões das páginas
   createPaginationButtons(pages) {
-    if(pages === 0) return
-
     const {
       transactionsCurrentPage: currentPage,
       transactionsPageOffset: pageOffset,
@@ -206,6 +205,8 @@ const DOM = {
     } = DOM;
 
     pageButtons.innerHTML = '';
+
+    if(pages === 0) return
 
     let maxLeft = (currentPage - Math.floor(pageOffset / 2));
     let maxRight = (currentPage + Math.floor(pageOffset / 2));
