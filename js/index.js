@@ -175,7 +175,6 @@ const DOM = {
   // Adiciona todas as transações na tabela
   renderTransactions() {
     const { data, totalPage } = DOM.transactionsPaginate();
-    console.log(totalPage);
     DOM.clearTransactions();
     
     data.forEach(DOM.addTransaction);
@@ -247,6 +246,80 @@ const DOM = {
   }
 };
 
+// Ordenar a coluna
+const OrderColumn = {
+  currentOrderButton: undefined,
+
+  orderDescriptionButton: document.querySelector('#order-description'),
+  orderAmountButton: document.querySelector('#order-amount'),
+  orderDateButton: document.querySelector('#order-date'),
+
+  resetOthersButtonsOrder() {
+    document.querySelectorAll('.order').forEach(btn => {
+      const { order } = btn.dataset;
+
+      btn.dataset.order = btn === OrderColumn.currentOrderButton ? order : 'desc';
+    });
+  },
+
+  toggleOrder() {
+    const { order } = OrderColumn.currentOrderButton.dataset;
+
+    OrderColumn.currentOrderButton.dataset.order = order === 'desc' ? 'asc' : 'desc';
+  },
+
+  // Ordenar baseado na descrição
+  byDescription() {
+    OrderColumn.currentOrderButton = OrderColumn.orderDescriptionButton;
+    OrderColumn.resetOthersButtonsOrder();
+
+    if(OrderColumn.currentOrderButton.dataset.order === 'desc') {
+      Transaction.all = Transaction.all.sort((a, b) => {
+        return a.description.localeCompare(b.description, 'pt-br', { ignorePunctuation: true })
+      });
+    } else {
+      Transaction.all = Transaction.all.sort((a, b) => {
+        return b.description.localeCompare(a.description, 'pt-br', { ignorePunctuation: true })
+      });
+    }
+    
+    OrderColumn.toggleOrder();
+    DOM.renderTransactions();
+
+  },
+
+  // Ordenar baseado no valor
+  byAmount() {
+    OrderColumn.currentOrderButton = OrderColumn.orderAmountButton;
+    OrderColumn.resetOthersButtonsOrder();
+
+    if(OrderColumn.currentOrderButton.dataset.order === 'desc') {
+      Transaction.all = Transaction.all.sort((a, b) => {
+        return a.amount > b.amount ? 1 : -1;
+      });
+    } else {
+      Transaction.all = Transaction.all.sort((a, b) => {
+        return a.amount > b.amount ? -1 : 1;
+      });
+    }
+    
+    OrderColumn.toggleOrder();
+    DOM.renderTransactions();
+  },
+
+  // Ordenar baseado na data
+  byDate() {
+    OrderColumn.currentOrderButton = OrderColumn.orderDateButton;
+    OrderColumn.resetOthersButtonsOrder();
+
+    if(OrderColumn.currentOrderButton.dataset.order === 'desc') {
+      // Para revisar outra hora
+    }
+
+    OrderColumn.toggleOrder();
+  }
+}
+
 // Métodos utilitários
 const Utils = {
   // Formata a quantia de dinheiro em R$
@@ -270,9 +343,10 @@ const Utils = {
 
   // Formata a data recebida no formulário
   formatDate(date) {
-    const [year, mounth, day] = date.split('-');
+    /* const [year, mounth, day] = date.split('-'); */
+    date = new Date(date);
 
-    return `${day}/${mounth}/${year}`;
+    return date.toLocaleDateString('pt-BR');
 
   },
 }
