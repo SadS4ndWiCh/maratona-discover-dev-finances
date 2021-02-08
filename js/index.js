@@ -43,14 +43,14 @@ const Theme = {
         Theme.changingTheme = false;
       }, 100);
 
-      window.localStorage.setItem('theme', htmlTag.dataset.theme);
+      window.localStorage.setItem('dev.finances:theme', htmlTag.dataset.theme);
     });
   },
 
   // Aplica o tema inicial caso tenha um tema salvo no localStorage
   // caso não tenha nada salvo no localStorage, será o tema claro padão
   applyInitialTheme() {
-    const theme = localStorage.getItem('theme');
+    const theme = localStorage.getItem('dev.finances:theme');
     if(theme != null) {
       const htmlTag = document.querySelector('html');
       htmlTag.setAttribute('data-theme', theme);
