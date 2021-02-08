@@ -108,6 +108,10 @@ body {
     margin: auto;
 }
 
+[data-order="asc"] img {
+    transform: rotate(180deg);
+}
+
 /* Titles ==================================== */
 
 h2 {
@@ -174,6 +178,13 @@ a.button.cancel {
 
 a.button.cancel:hover {
     opacity: 1;
+}
+
+button.btn-icon {
+    width: 25px;
+    height: 25px;
+
+    background-color: transparent;
 }
 
 /* Header ==================================== */
@@ -280,11 +291,23 @@ html[data-theme="light"] .card.total img {
 
 }
 
-table th {
-    padding: 1rem 2rem;
+table th button {
+    display: flex;
+    align-items: center;
 
     font-weight: normal;
+    font-family: 'Poppins';
+    font-size: 14px;
+
     text-align: left;
+}
+
+table th button span {
+    padding-right: 1rem;
+}
+
+table th {
+    padding: 1rem 2rem;
 
     background-color: var(--global-table-bg-color);
 }
