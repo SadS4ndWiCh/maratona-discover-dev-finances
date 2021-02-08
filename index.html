@@ -58,9 +58,39 @@
                 <table id="data-table">
                     <thead>
                         <tr>
-                            <th>Descrição</th>
-                            <th>Valor</th>
-                            <th>Dia</th>
+                            <th>
+                              <button
+                              id="order-description"
+                              class="order btn-icon"
+                              onclick="OrderColumn.byDescription()"
+                              data-order="desc"  
+                              >
+                                <span>Descrição</span>
+                                <img src="./assets/arrow-down.svg" alt="Ordernar Descrição">
+                              </button>
+                            </th>
+                            <th>
+                              <button
+                              id="order-amount"
+                              class="order btn-icon"
+                              onclick="OrderColumn.byAmount()"
+                              data-order="desc"  
+                              >
+                                <span>Valor</span>
+                                <img src="./assets/arrow-down.svg" alt="Ordernar Valor">
+                              </button>
+                            </th>
+                            <th>
+                              <button
+                              id="order-date"
+                              class="order btn-icon"
+                              onclick="OrderColumn.byDate()"
+                              data-order="desc"  
+                              >
+                                <span>Dia</span>
+                                <img src="./assets/arrow-down.svg" alt="Ordernar Data">
+                              </button>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
