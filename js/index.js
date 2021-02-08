@@ -123,11 +123,6 @@ const Transaction = {
 const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
 
-  transactionsPageButtons: document.querySelector('#table-pages-buttons'),
-  transactionsCurrentPage: 1,
-  transactionsPerPage: 6,
-  transactionsPageOffset: 5,
-
   balanceIncomeDisplay: document.querySelector('#income-display'),
   balanceExpenseDisplay: document.querySelector('#expense-display'),
   balanceTotalDisplay: document.querySelector('#total-display'),
@@ -176,19 +171,27 @@ const DOM = {
 
   // Adiciona todas as transações na tabela
   renderTransactions() {
-    const { data, totalPage } = DOM.transactionsPaginate();
+    const { data, totalPage } = Paginate.transactionsPaginate();
     DOM.clearTransactions();
     
     data.forEach(DOM.addTransaction);
-    DOM.createPaginationButtons(totalPage);
+    Paginate.createPaginationButtons(totalPage);
   },
+};
+
+// Métodos para manipular a paginação
+const Paginate = {
+  transactionsPageButtons: document.querySelector('#table-pages-buttons'),
+  transactionsCurrentPage: 1,
+  transactionsPerPage: 6,
+  transactionsPageOffset: 5,
 
   // Pega as transações correspondente a página
   transactionsPaginate() {
-    const currentPage = DOM.transactionsCurrentPage;
-    const totalPage = Math.ceil(Transaction.all.length / DOM.transactionsPerPage);
-    const firstIndex = (currentPage - 1) * DOM.transactionsPerPage;
-    const lastIndex = firstIndex + DOM.transactionsPerPage;
+    const currentPage = Paginate.transactionsCurrentPage;
+    const totalPage = Math.ceil(Transaction.all.length / Paginate.transactionsPerPage);
+    const firstIndex = (currentPage - 1) * Paginate.transactionsPerPage;
+    const lastIndex = firstIndex + Paginate.transactionsPerPage;
 
     return {
       data: Transaction.all.slice(firstIndex, lastIndex),
@@ -203,7 +206,7 @@ const DOM = {
       transactionsCurrentPage: currentPage,
       transactionsPageOffset: pageOffset,
       transactionsPageButtons: pageButtons,
-    } = DOM;
+    } = Paginate;
 
     pageButtons.innerHTML = '';
 
@@ -227,26 +230,26 @@ const DOM = {
 
     for (let page = maxLeft; page <= maxRight; page++) {
       pageButtons.innerHTML += `
-        <button value="${page}" class="page ${page === currentPage ? 'current' : ''}" onclick="DOM.goToPage(this.value)">${page}</button>
+        <button value="${page}" class="page ${page === currentPage ? 'current' : ''}" onclick="Paginate.goToPage(this.value)">${page}</button>
       `
     }
 
     if(currentPage != 1) {
-      pageButtons.innerHTML = `<button value="1" class="page" onclick="DOM.goToPage(this.value)">&#171; First</button>` + pageButtons.innerHTML;
+      pageButtons.innerHTML = `<button value="1" class="page" onclick="Paginate.goToPage(this.value)">&#171; First</button>` + pageButtons.innerHTML;
     }
 
     if(currentPage != pages) {
-      pageButtons.innerHTML += `<button value="${pages}" class="page" onclick="DOM.goToPage(this.value)">Last &#187;</button>`;
+      pageButtons.innerHTML += `<button value="${pages}" class="page" onclick="Paginate.goToPage(this.value)">Last &#187;</button>`;
     }
   },
 
   // Move para outra página da tabela
   goToPage(page) {
-    DOM.transactionsCurrentPage = Number(page);
+    Paginate.transactionsCurrentPage = Number(page);
 
     DOM.renderTransactions();
   }
-};
+}
 
 // Ordenar a coluna
 const OrderColumn = {
