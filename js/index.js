@@ -143,6 +143,8 @@ const DOM = {
 
   // Cria a row da transação
   innerHTMLTransaction({ description, amount, date, type }, index) {
+    date = Utils.formatDateToLocale(date);
+
     const html = `
       <td class="description">${description}</td>
       <td class="${type}">${Utils.formatCurrency(amount)}</td>
@@ -313,10 +315,23 @@ const OrderColumn = {
     OrderColumn.resetOthersButtonsOrder();
 
     if(OrderColumn.currentOrderButton.dataset.order === 'desc') {
-      // Para revisar outra hora
+      Transaction.all = Transaction.all.sort((a, b) => {
+        const aDate = new Date(a.date);
+        const bDate = new Date(b.date);
+
+        return aDate.getTime() > bDate.getTime() ? 1 : -1;
+      });
+    } else {
+      Transaction.all = Transaction.all.sort((a, b) => {
+        const aDate = new Date(a.date);
+        const bDate = new Date(b.date);
+
+        return aDate.getTime() > bDate.getTime() ? -1 : 1;
+      });
     }
 
     OrderColumn.toggleOrder();
+    DOM.renderTransactions();
   }
 }
 
@@ -343,12 +358,16 @@ const Utils = {
 
   // Formata a data recebida no formulário
   formatDate(date) {
-    /* const [year, mounth, day] = date.split('-'); */
-    date = new Date(date);
+    const [year, mounth, day] = date.split('-');
+    date = new Date(year, mounth - 1, day);
 
-    return date.toLocaleDateString('pt-BR');
-
+    return date.toDateString();
   },
+
+  formatDateToLocale(date, locale) {
+    const convertedDate = new Date(date);
+    return convertedDate.toLocaleDateString(locale);
+  }
 }
 
 // Métodos para manipular o Formulário
