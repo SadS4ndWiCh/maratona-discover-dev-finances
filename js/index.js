@@ -295,11 +295,11 @@ const OrderColumn = {
 
     if(OrderColumn.currentOrderButton.dataset.order === 'desc') {
       Transaction.all = Transaction.all.sort((a, b) => {
-        return a.amount > b.amount ? 1 : -1;
+        return Math.abs(a.amount) > Math.abs(b.amount) ? 1 : -1;
       });
     } else {
       Transaction.all = Transaction.all.sort((a, b) => {
-        return a.amount > b.amount ? -1 : 1;
+        return Math.abs(a.amount) > Math.abs(b.amount) ? -1 : 1;
       });
     }
     
