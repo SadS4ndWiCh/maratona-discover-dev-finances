@@ -463,6 +463,11 @@ const Form = {
     Form.descriptionField.value = '';
     Form.amountField.value = '';
     Form.dateField.value = '';
+
+    Form.descriptionEditField.value = '';
+    Form.amountEditField.value = '';
+    Form.dateEditField.value = '';
+    Form.indexEditField.value = '';
   },
 
   submit(event, submitType) {
