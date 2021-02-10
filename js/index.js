@@ -1,19 +1,17 @@
 // Manipular o Modal
 const Modal = {
-  modalHtml: document.querySelector('.modal-overlay'),
-
-  toggle() {
-    // Abrir o modal caso esteja fechado
-    // e fechar o modal caso esteja aberto
-    Modal.modalHtml.classList.toggle('active');
+  openAddTransaction() {
+    document.querySelector('#add-transaction').classList.add('active');
   },
 
-  open() {
-    Modal.modalHtml.classList.add('active');
+  openEditTransaction(transactionIndex) {
+    const transaction = Transaction.all[transactionIndex];
+    Form.insertData(transactionIndex, transaction);
+    document.querySelector('#edit-transaction').classList.add('active');
   },
 
   close() {
-    Modal.modalHtml.classList.remove('active');
+    document.querySelector('.modal-overlay.active').classList.remove('active');
   }
 }
 
@@ -74,8 +72,8 @@ const Transaction = {
   all: Storage.get(),
 
   // Adiciona uma nova transação
-  add(transaction) {
-    Transaction.all.push(transaction);
+  add(newTransaction) {
+    Transaction.all.push({ ...newTransaction, id: Transaction.all.length });
 
     // Depois de adicionar uma nova transação, recarregue
     App.reload();
@@ -87,6 +85,14 @@ const Transaction = {
     Transaction.all.splice(transactionIndex, 1);
     
     // Depois de remover uma transação, recarregue
+    App.reload();
+  },
+
+  // Edita uma transação
+  edit(editedTransacion) {
+    const transactionIndex = editedTransacion.id;
+    Transaction.all.splice(transactionIndex, 1, editedTransacion);
+
     App.reload();
   },
 
@@ -139,13 +145,17 @@ const DOM = {
   // Cria a row da transação
   innerHTMLTransaction({ description, amount, date, type }, index) {
     date = Utils.formatDateToLocale(date);
+    const currency = Utils.formatCurrency(amount);
 
     const html = `
       <td class="description">${description}</td>
-      <td class="${type}">${Utils.formatCurrency(amount)}</td>
+      <td class="${type} amount"><span>${currency}</span></td>
       <td class="date">${date}</td>
       <td>
-        <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remove Transaction">
+        <div class="transaction-options">
+          <div class="btn-icon" onclick="Modal.openEditTransaction(${index})"><img src="./assets/edit.svg" alt="Edit Transaction"></div>
+          <div class="btn-icon" onclick="Transaction.remove(${index})"><img src="./assets/minus.svg" alt="Remove Transaction"></div>
+        </div>
       </td>
     `;
 
@@ -361,6 +371,7 @@ const Utils = {
 
   // Formata a data recebida no formulário
   formatDate(date) {
+
     const [year, mounth, day] = date.split('-');
     date = new Date(year, mounth - 1, day);
 
@@ -370,7 +381,7 @@ const Utils = {
   formatDateToLocale(date, locale) {
     const convertedDate = new Date(date);
     return convertedDate.toLocaleDateString(locale);
-  }
+  },
 }
 
 // Métodos para manipular o Formulário
@@ -379,39 +390,73 @@ const Form = {
   amountField: document.querySelector('#amount'),
   dateField: document.querySelector('#date'),
 
+  descriptionEditField: document.querySelector('#editDescription'),
+  amountEditField: document.querySelector('#editAmount'),
+  dateEditField: document.querySelector('#editDate'),
+  indexEditField: document.querySelector('#editIndex'),
+
   // Pega os valores dos campos
-  getValues() {
-    return {
-      description: Form.descriptionField.value,
-      amount: Form.amountField.value,
-      date: Form.dateField.value,
+  getValuesOf(modalType) {
+    const options = {
+      add: {
+        description: Form.descriptionField.value,
+        amount: Form.amountField.value,
+        date: Form.dateField.value,
+      },
+      edit: {
+        id: Form.indexEditField.value,
+        description: Form.descriptionEditField.value,
+        amount: Form.amountEditField.value,
+        date: Form.dateEditField.value,
+      }
     }
+
+    return options[modalType]
+  },
+
+  insertData(index, transaction) {
+    let { description, amount, date } = transaction;
+
+    Form.indexEditField.value = index;
+    Form.descriptionEditField.value = description;
+    Form.amountEditField.value = amount / 100;
+
+    date = (new Date(date)).toLocaleDateString('pt-BR');
+    Form.dateEditField.value = date.split('/').reverse().join('-');
   },
 
   // Formata os valores do formulário
-  formatValues() {
-    let { description, amount, date } = Form.getValues();
+  formatValuesOf(modalType) {
+    if(modalType === 'add') {
+      let { description, amount, date } = Form.getValuesOf(modalType);
+      
+      amount = Utils.formatAmount(amount);
+      date = Utils.formatDate(date);
+  
+      return {
+        description,
+        amount,
+        date,
+        type: amount > 0 ? 'income' : 'expense',
+      }
+    } else if(modalType === 'edit') {
+      let { id, description, amount, date } = Form.getValuesOf(modalType);
+      
+      id = parseInt(id);
+      amount = Utils.formatAmount(amount);
+      date = Utils.formatDate(date);
+  
+      return {
+        id,
+        description,
+        amount,
+        date,
+        type: amount > 0 ? 'income' : 'expense',
+      }
 
-    amount = Utils.formatAmount(amount);
-    date = Utils.formatDate(date);
-
-    return {
-      description,
-      amount,
-      date,
-      type: amount > 0 ? 'income' : 'expense',
     }
-  },
 
-  // Valida se os campos estão preenchidos
-  validateFields() {
-    const { description, amount, date } = Form.getValues();
-
-    if( description.trim() === '' ||
-        amount.trim() === '' ||
-        date.trim() === '' ) {
-      throw new Error('Por favor, preencha todos os campos');
-    }
+    id = parseInt(id);
   },
 
   clearFields() {
@@ -420,23 +465,26 @@ const Form = {
     Form.dateField.value = '';
   },
 
-  submit(event) {
+  submit(event, submitType) {
     event.preventDefault();
     
     try {
-      Form.validateFields();
-      
-      const transaction = Form.formatValues();
-      Transaction.add(transaction);
+      if(submitType === 'add') {
+        const newTransaction = Form.formatValuesOf('add');
+        Transaction.add(newTransaction);
+
+      } else if (submitType === 'edit') {
+        const editedTransaction = Form.formatValuesOf('edit');
+        console.log(editedTransaction);
+        Transaction.edit(editedTransaction);
+      }
 
       Form.clearFields();
       Modal.close();
-
     } catch(error) {
       alert(error.message);
     }
-
-  }
+  },
 };
 
 // Métodos para manipular as funcionalidades do app em si
