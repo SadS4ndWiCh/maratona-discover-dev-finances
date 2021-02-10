@@ -340,11 +340,9 @@ table tbody tr td:last-child {
     border-radius: 0 0.25rem 0.25rem 0;
 }
 
-table thead tr th:first-child {
-    width: 100%;
-}
-
 td.description {
+    max-width: 300px;
+
     color: var(--dark-blue);
 }
 
@@ -355,6 +353,8 @@ td.income {
 td.expense {
     color: var(--global-table-val-ex-color);
 }
+
+/* Table Buttons ==================================== */
 
 #table-pages-buttons {
     display: flex;
