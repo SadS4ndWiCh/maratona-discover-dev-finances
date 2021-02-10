@@ -52,7 +52,7 @@
         <section id="transaction">
             <h2 class="sr-only">Transações</h2>
 
-            <a href="#" class="button new" onclick="Modal.toggle()">+ Nova Transação</a>
+            <a href="#" class="button new" onclick="Modal.openAddTransaction()">+ Nova Transação</a>
             
             <div class="transaction-table">
                 <table id="data-table">
@@ -69,7 +69,7 @@
                                 <img src="./assets/arrow-down.svg" alt="Ordernar Descrição">
                               </button>
                             </th>
-                            <th>
+                            <th id="t-amount">
                               <button
                               id="order-amount"
                               class="order btn-icon"
@@ -91,6 +91,7 @@
                                 <img src="./assets/arrow-down.svg" alt="Ordernar Data">
                               </button>
                             </th>
+
                             <th></th>
                         </tr>
                     </thead>
@@ -109,11 +110,11 @@
         <p>dev.finance$</p>
     </footer>
 
-    <div class="modal-overlay">
+    <div id="add-transaction" class="modal-overlay">
         <div class="modal">
             <div id="form">
                 <h2>Nova Transação</h2>
-                <form action="" onsubmit="Form.submit(event)">
+                <form action="" onsubmit="Form.submit(event, 'add')">
                     <div class="input-group">
                         <label for="description">Descrição</label>
                         <input id="description" name="description" type="text" placeholder="Descrição da transação" autocomplete="off" required>
@@ -131,7 +132,39 @@
                     </div>
 
                     <div class="input-group actions">
-                        <a href="#" class="button cancel" onclick="Modal.toggle()">Cancelar</a>
+                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
+                        <button>Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-transaction" class="modal-overlay">
+        <div class="modal">
+            <div id="form">
+                <h2>Editar Transação</h2>
+                <form action="" onsubmit="Form.submit(event, 'edit')">
+                    <input id="editIndex" type="number" class="sr-only">
+
+                    <div class="input-group">
+                        <label for="description">Descrição</label>
+                        <input id="editDescription" name="description" type="text" placeholder="Descrição da transação" autocomplete="off" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="amount">Valor</label>
+                        <input id="editAmount" name="amount" type="number" step="0.01" placeholder="i.e 0,00" autocomplete="off" required>
+                        <small class="help">Use sinal - (negativo) para despesas e , (vírgula) para casas decimais.</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="sr-only" for="date">Data</label>
+                        <input id="editDate" name="date" type="date" required>
+                    </div>
+
+                    <div class="input-group actions">
+                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
                         <button>Salvar</button>
                     </div>
                 </form>
