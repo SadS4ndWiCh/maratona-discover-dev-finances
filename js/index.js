@@ -231,7 +231,7 @@ const Paginate = {
 
     pageButtons.innerHTML = "";
 
-    if (pages === 0) return;
+    if (pages <= 1) return;
 
     let maxLeft = currentPage - Math.floor(pageOffset / 2);
     let maxRight = currentPage + Math.floor(pageOffset / 2);
