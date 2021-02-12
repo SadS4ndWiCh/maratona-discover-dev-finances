@@ -10,6 +10,10 @@ const Modal = {
     document.querySelector("#edit-transaction").classList.add("active");
   },
 
+  openFilterTransaction() {
+    document.querySelector('#filter-transaction').classList.add('active');
+  },
+
   close() {
     document.querySelector(".modal-overlay.active").classList.remove("active");
   },
@@ -77,6 +81,7 @@ const Transaction = {
   // Adiciona uma nova transação
   add(newTransaction) {
     Transaction.all.push({ ...newTransaction, id: Transaction.all.length });
+    DOM.transactions = [...Transaction.all];
 
     // Depois de adicionar uma nova transação, recarregue
     App.reload();
@@ -86,6 +91,7 @@ const Transaction = {
   remove(transactionIndex) {
     // Usando o index do Array, mas tem que usar o ID
     Transaction.all.splice(transactionIndex, 1);
+    Transaction.updateDOMTransactions();
 
     // Depois de remover uma transação, recarregue
     App.reload();
@@ -95,8 +101,48 @@ const Transaction = {
   edit(editedTransacion) {
     const transactionIndex = editedTransacion.id;
     Transaction.all.splice(transactionIndex, 1, editedTransacion);
+    Transaction.updateDOMTransactions();
 
     App.reload();
+  },
+
+  // Filtra as transações
+  filter(initialDate, finalDate, transactionType) {
+    let filteredTransactions = [...Transaction.all];
+
+    filteredTransactions = filteredTransactions.filter(transaction => {
+      const transactionDate = new Date(transaction.date);
+
+      // Tem a Data Inicial e Data Final
+      if(initialDate && finalDate) {
+        return transactionDate.getTime() >= initialDate && transactionDate.getDate() <= finalDate;
+
+      // Não tem a Data Inicial e tem a Data Final
+      } else if(!initialDate && finalDate) {
+        return transactionDate.getTime() <= finalDate;
+      
+      // Tem a Data Inicial e não tem a Data Final
+      } else if(initialDate && !finalDate) {
+        return transactionDate.getTime() >= initialDate;
+      
+      }
+
+      // Não tem ambas
+      return true;
+    });
+
+    // Se o tipo da transação for diferente de 'any', filtre elas
+    if(transactionType !== 'any') {
+      filteredTransactions = filteredTransactions.filter(transaction => transaction.type === transactionType);
+    }
+
+    DOM.transactions = filteredTransactions;
+
+    App.reload();
+  },
+
+  updateDOMTransactions() {
+    DOM.transactions = [...Transaction.all];
   },
 
   // Calcula o total da Entradas
@@ -130,6 +176,8 @@ const Transaction = {
 
 // Métodos para manipular os dados visíveis
 const DOM = {
+  transactions: Storage.get(),
+
   transactionsContainer: document.querySelector("#data-table tbody"),
 
   balanceIncomeDisplay: document.querySelector("#income-display"),
@@ -152,7 +200,7 @@ const DOM = {
 
     const html = `
       <td class="description">${description}</td>
-      <td class="${type} amount"><span>${currency}</span></td>
+      <td class="${type} amount num-display">${currency}</td>
       <td class="date">${date}</td>
       <td>
         <div class="transaction-options">
@@ -215,7 +263,7 @@ const Paginate = {
     const lastIndex = firstIndex + Paginate.transactionsPerPage;
 
     return {
-      data: Transaction.all.slice(firstIndex, lastIndex),
+      data: DOM.transactions.slice(firstIndex, lastIndex),
       currentPage,
       totalPage,
     };
@@ -274,6 +322,16 @@ const Paginate = {
 
     DOM.renderTransactions();
   },
+
+  updatePerPage(event) {
+    const { target } = event;
+    const perPage = Math.min(25, Math.max(4, Number(target.value)));
+
+    Paginate.transactionsPerPage = perPage;
+    target.value = perPage;
+
+    DOM.renderTransactions();
+  }
 };
 
 // Ordenar a coluna
@@ -306,13 +364,13 @@ const OrderColumn = {
     OrderColumn.resetOthersButtonsOrder();
 
     if (OrderColumn.currentOrderButton.dataset.order === "desc") {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         return a.description.localeCompare(b.description, "pt-br", {
           ignorePunctuation: true,
         });
       });
     } else {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         return b.description.localeCompare(a.description, "pt-br", {
           ignorePunctuation: true,
         });
@@ -329,11 +387,11 @@ const OrderColumn = {
     OrderColumn.resetOthersButtonsOrder();
 
     if (OrderColumn.currentOrderButton.dataset.order === "desc") {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         return Math.abs(a.amount) > Math.abs(b.amount) ? 1 : -1;
       });
     } else {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         return Math.abs(a.amount) > Math.abs(b.amount) ? -1 : 1;
       });
     }
@@ -348,14 +406,14 @@ const OrderColumn = {
     OrderColumn.resetOthersButtonsOrder();
 
     if (OrderColumn.currentOrderButton.dataset.order === "desc") {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         const aDate = new Date(a.date);
         const bDate = new Date(b.date);
 
         return aDate.getTime() > bDate.getTime() ? 1 : -1;
       });
     } else {
-      Transaction.all = Transaction.all.sort((a, b) => {
+      DOM.transactions = DOM.transactions.sort((a, b) => {
         const aDate = new Date(a.date);
         const bDate = new Date(b.date);
 
@@ -397,6 +455,14 @@ const Utils = {
     return date.toDateString();
   },
 
+  formatFormDateToObject(date) {
+    if(!date) return undefined;
+
+    const dateString = Utils.formatDate(date);
+
+    return new Date(dateString);
+  },
+
   formatDateToLocale(date, locale) {
     const convertedDate = new Date(date);
     return convertedDate.toLocaleDateString(locale);
@@ -414,6 +480,10 @@ const Form = {
   dateEditField: document.querySelector("#editDate"),
   indexEditField: document.querySelector("#editIndex"),
 
+  initialDateFilter: document.querySelector('#initialDate'),
+  finalDateFilter: document.querySelector('#finalDate'),
+  transactionTypeFilter: document.querySelector('#transactionType'),
+
   // Pega os valores dos campos
   getValuesOf(modalType) {
     const options = {
@@ -428,6 +498,11 @@ const Form = {
         amount: Form.amountEditField.value,
         date: Form.dateEditField.value,
       },
+      filter: {
+        initialDate: Form.initialDateFilter.value,
+        finalDate: Form.finalDateFilter.value,
+        transactionTypeFilter: Form.transactionTypeFilter.value,
+      }
     };
 
     return options[modalType];
@@ -497,8 +572,15 @@ const Form = {
         Transaction.add(newTransaction);
       } else if (submitType === "edit") {
         const editedTransaction = Form.formatValuesOf("edit");
-        console.log(editedTransaction);
+
         Transaction.edit(editedTransaction);
+      } else if(submitType === "filter") {
+        let { initialDate, finalDate, transactionTypeFilter } = Form.getValuesOf('filter');
+
+        initialDate = Utils.formatFormDateToObject(initialDate);
+        finalDate = Utils.formatFormDateToObject(finalDate);
+
+        Transaction.filter(initialDate, finalDate, transactionTypeFilter);
       }
 
       Form.clearFields();
