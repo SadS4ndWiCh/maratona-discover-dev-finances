@@ -1,233 +1,280 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dev.finance$</title>
 
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&display=swap" rel="stylesheet">
-
-</head>
-<body>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <header>
-        <img src="./assets/logo.svg" alt="Logo Dev Finance">
-        
-        <div class="theme-switch" onclick="Theme.toggleLightDark()">
-            <img src="./assets/theme.svg" alt="Theme icon">
-        </div>
+      <img src="./assets/logo.svg" alt="Logo Dev Finance" />
+
+      <div class="theme-switch" onclick="Theme.toggleLightDark()">
+        <img src="./assets/theme.svg" alt="Theme icon" />
+      </div>
     </header>
 
     <main class="container">
-        <section id="balance">
-            <h2 class="sr-only">Balanço</h2>
-            
-            <div class="card incomes">
-                <h3>
-                    <span>Entradas</span>
-                    <img src="./assets/income.svg" alt="Income image">
-                </h3>
-                <p id="income-display" class="num-display">R$ 0,00</p>
-            </div>
+      <section id="balance">
+        <h2 class="sr-only">Balanço</h2>
 
-            <div class="card expenses">
-                <h3>
-                    <span>Saídas</span>
-                    <img src="./assets/expense.svg" alt="Expense image">
-                
-                </h3>
-                <p id="expense-display" class="num-display">R$ 0,00</p>
-            </div>
+        <div class="card incomes">
+          <h3>
+            <span>Entradas</span>
+            <img src="./assets/income.svg" alt="Income image" />
+          </h3>
+          <p id="income-display" class="num-display">R$ 0,00</p>
+        </div>
 
-            <div class="card total">
-                <h3>
-                    <span>Total</span>
-                    <img src="./assets/total.svg" alt="">
-                </h3>
-                <p id="total-display" class="num-display">R$ 0,00</p>
-            </div>
-        </section>
+        <div class="card expenses">
+          <h3>
+            <span>Saídas</span>
+            <img src="./assets/expense.svg" alt="Expense image" />
+          </h3>
+          <p id="expense-display" class="num-display">R$ 0,00</p>
+        </div>
 
-        <section id="transaction">
-            <h2 class="sr-only">Transações</h2>
-            
-            <div id="transaction-buttons">
-                <a href="#" class="button new" onclick="Modal.openAddTransaction()">+ Nova Transação</a>
-                <a href="#" class="button filter" onclick="Modal.openFilterTransaction()">
-                    <img src="./assets/arrow-down.svg" alt="Arrow down">
-                    <span>Filtrar</span>
-                </a>
-            </div>
-            
-            <div class="transaction-table">
-                <table id="data-table">
-                    <thead>
-                        <tr>
-                            <th>
-                              <button
-                              id="order-description"
-                              class="order btn-icon"
-                              onclick="OrderColumn.byDescription()"
-                              data-order="desc"  
-                              >
-                                <span>Descrição</span>
-                                <img src="./assets/arrow-down.svg" alt="Ordernar Descrição">
-                              </button>
-                            </th>
-                            <th id="t-amount">
-                              <button
-                              id="order-amount"
-                              class="order btn-icon"
-                              onclick="OrderColumn.byAmount()"
-                              data-order="desc"  
-                              >
-                                <span>Valor</span>
-                                <img src="./assets/arrow-down.svg" alt="Ordernar Valor">
-                              </button>
-                            </th>
-                            <th>
-                              <button
-                              id="order-date"
-                              class="order btn-icon"
-                              onclick="OrderColumn.byDate()"
-                              data-order="desc"  
-                              >
-                                <span>Dia</span>
-                                <img src="./assets/arrow-down.svg" alt="Ordernar Data">
-                              </button>
-                            </th>
+        <div class="card total">
+          <h3>
+            <span>Total</span>
+            <img src="./assets/total.svg" alt="" />
+          </h3>
+          <p id="total-display" class="num-display">R$ 0,00</p>
+        </div>
+      </section>
 
-                            <th></th>
-                        </tr>
-                    </thead>
-    
-                    <tbody>
-                    </tbody>
-                </table>
+      <section id="transaction">
+        <h2 class="sr-only">Transações</h2>
 
-            </div>
-            <div id="table-pages-buttons">
-            </div>
-        </section>
+        <div id="transaction-buttons">
+          <a href="#" class="button new" onclick="Modal.openAddTransaction()"
+            >+ Nova Transação</a
+          >
+          <a
+            href="#"
+            class="button filter"
+            onclick="Modal.openFilterTransaction()"
+          >
+            <img src="./assets/arrow-down.svg" alt="Arrow down" />
+            <span>Filtrar</span>
+          </a>
+        </div>
+
+        <div class="transaction-table">
+          <table id="data-table">
+            <thead>
+              <tr>
+                <th>
+                  <button
+                    id="order-description"
+                    class="order btn-icon"
+                    onclick="OrderColumn.byDescription()"
+                    data-order="desc"
+                  >
+                    <span>Descrição</span>
+                    <img
+                      src="./assets/arrow-down.svg"
+                      alt="Ordernar Descrição"
+                    />
+                  </button>
+                </th>
+                <th id="t-amount">
+                  <button
+                    id="order-amount"
+                    class="order btn-icon"
+                    onclick="OrderColumn.byAmount()"
+                    data-order="desc"
+                  >
+                    <span>Valor</span>
+                    <img src="./assets/arrow-down.svg" alt="Ordernar Valor" />
+                  </button>
+                </th>
+                <th>
+                  <button
+                    id="order-date"
+                    class="order btn-icon"
+                    onclick="OrderColumn.byDate()"
+                    data-order="desc"
+                  >
+                    <span>Dia</span>
+                    <img src="./assets/arrow-down.svg" alt="Ordernar Data" />
+                  </button>
+                </th>
+
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="table-pages-buttons"></div>
+      </section>
     </main>
 
     <footer>
-        <p>dev.finance$</p>
+      <p>dev.finance$</p>
     </footer>
 
     <div id="add-transaction" class="modal-overlay">
-        <div class="modal">
-            <div id="form">
-                <h2>Nova Transação</h2>
-                <form action="" onsubmit="Form.submit(event, 'add')">
-                    <div class="input-group">
-                        <label for="description">Descrição</label>
-                        <input id="description" name="description" type="text" placeholder="Descrição da transação" autocomplete="off" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="amount">Valor</label>
-                        <input id="amount" name="amount" type="number" step="0.01" placeholder="i.e 0,00" autocomplete="off" required>
-                        <small class="help">Use sinal - (negativo) para despesas e , (vírgula) para casas decimais.</small>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="sr-only" for="date">Data</label>
-                        <input id="date" name="date" type="date" required>
-                    </div>
-
-                    <div class="input-group actions">
-                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
-                        <button>Salvar</button>
-                    </div>
-                </form>
+      <div class="modal">
+        <div id="form">
+          <h2>Nova Transação</h2>
+          <form action="" onsubmit="Form.submit(event, 'add')">
+            <div class="input-group">
+              <label for="description">Descrição</label>
+              <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Descrição da transação"
+                autocomplete="off"
+                required
+              />
             </div>
+
+            <div class="input-group">
+              <label for="amount">Valor</label>
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                placeholder="i.e 0,00"
+                autocomplete="off"
+                required
+              />
+              <small class="help"
+                >Use sinal - (negativo) para despesas e , (vírgula) para casas
+                decimais.</small
+              >
+            </div>
+
+            <div class="input-group">
+              <label class="sr-only" for="date">Data</label>
+              <input id="date" name="date" type="date" required />
+            </div>
+
+            <div class="input-group actions">
+              <a href="#" class="button cancel" onclick="Modal.close()"
+                >Cancelar</a
+              >
+              <button>Salvar</button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
 
     <div id="edit-transaction" class="modal-overlay">
-        <div class="modal">
-            <div id="form">
-                <h2>Editar Transação</h2>
-                <form action="" onsubmit="Form.submit(event, 'edit')">
-                    <input id="editIndex" type="number" class="sr-only">
+      <div class="modal">
+        <div id="form">
+          <h2>Editar Transação</h2>
+          <form action="" onsubmit="Form.submit(event, 'edit')">
+            <input id="editIndex" type="number" class="sr-only" />
 
-                    <div class="input-group">
-                        <label for="description">Descrição</label>
-                        <input id="editDescription" name="description" type="text" placeholder="Descrição da transação" autocomplete="off" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="amount">Valor</label>
-                        <input id="editAmount" name="amount" type="number" step="0.01" placeholder="i.e 0,00" autocomplete="off" required>
-                        <small class="help">Use sinal - (negativo) para despesas e , (vírgula) para casas decimais.</small>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="sr-only" for="date">Data</label>
-                        <input id="editDate" name="date" type="date" required>
-                    </div>
-
-                    <div class="input-group actions">
-                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
-                        <button>Salvar</button>
-                    </div>
-                </form>
+            <div class="input-group">
+              <label for="description">Descrição</label>
+              <input
+                id="editDescription"
+                name="description"
+                type="text"
+                placeholder="Descrição da transação"
+                autocomplete="off"
+                required
+              />
             </div>
+
+            <div class="input-group">
+              <label for="amount">Valor</label>
+              <input
+                id="editAmount"
+                name="amount"
+                type="number"
+                step="0.01"
+                placeholder="i.e 0,00"
+                autocomplete="off"
+                required
+              />
+              <small class="help"
+                >Use sinal - (negativo) para despesas e , (vírgula) para casas
+                decimais.</small
+              >
+            </div>
+
+            <div class="input-group">
+              <label class="sr-only" for="date">Data</label>
+              <input id="editDate" name="date" type="date" required />
+            </div>
+
+            <div class="input-group actions">
+              <a href="#" class="button cancel" onclick="Modal.close()"
+                >Cancelar</a
+              >
+              <button>Salvar</button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
 
-    
     <div id="filter-transaction" class="modal-overlay">
-        <div class="modal">
-            <div id="form">
-                <h2>Filtrar Transação</h2>
-                <form action="" onsubmit="Form.submit(event, 'filter')">
-                    <div class="input-group">
-                        <label for="perPage">Por Página</label>
-                        <input
-                            id="perPage"
-                            name="perPage"
-                            type="number"
-                            value="6"
-                            min="1"
-                            max="25"
-                            onchange="Paginate.updatePerPage(event)"    
-                        >
-                    </div>
-
-                    <div class="input-sub-group">
-                        <div class="input-group">
-                            <label for="initialdate">Data Inicial</label>
-                            <input id="initialDate" name="initialdate" type="date">
-                        </div>
-    
-                        <div class="input-group">
-                            <label for="finaldate">Data Final</label>
-                            <input id="finalDate" name="finaldate" type="date">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="transactionType">Tipo da Transação</label>
-                        <select name="transactionType" id="transactionType">
-                            <option value="any">Escolha algum tipo</option>
-                            <option value="income">Entrada</option>
-                            <option value="expense">Saída</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group actions">
-                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
-                        <button>Filtrar</button>
-                    </div>
-                </form>
+      <div class="modal">
+        <div id="form">
+          <h2>Filtrar Transação</h2>
+          <form action="" onsubmit="Form.submit(event, 'filter')">
+            <div class="input-group">
+              <label for="perPage">Por Página</label>
+              <input
+                id="perPage"
+                name="perPage"
+                type="number"
+                value="6"
+                min="1"
+                max="25"
+                onchange="Paginate.updatePerPage(event)"
+              />
             </div>
-        </div>
-    </div>
 
+            <div class="input-sub-group">
+              <div class="input-group">
+                <label for="initialdate">Data Inicial</label>
+                <input id="initialDate" name="initialdate" type="date" />
+              </div>
+
+              <div class="input-group">
+                <label for="finaldate">Data Final</label>
+                <input id="finalDate" name="finaldate" type="date" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="transactionType">Tipo da Transação</label>
+              <select name="transactionType" id="transactionType">
+                <option value="any">Escolha algum tipo</option>
+                <option value="income">Entrada</option>
+                <option value="expense">Saída</option>
+              </select>
+            </div>
+
+            <div class="input-group actions">
+              <a href="#" class="button cancel" onclick="Modal.close()"
+                >Cancelar</a
+              >
+              <button>Filtrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <script src="./js/index.js"></script>
-</body>
+  </body>
 </html>
