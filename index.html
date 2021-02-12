@@ -28,7 +28,7 @@
                     <span>Entradas</span>
                     <img src="./assets/income.svg" alt="Income image">
                 </h3>
-                <p id="income-display">R$ 0,00</p>
+                <p id="income-display" class="num-display">R$ 0,00</p>
             </div>
 
             <div class="card expenses">
@@ -37,7 +37,7 @@
                     <img src="./assets/expense.svg" alt="Expense image">
                 
                 </h3>
-                <p id="expense-display">R$ 0,00</p>
+                <p id="expense-display" class="num-display">R$ 0,00</p>
             </div>
 
             <div class="card total">
@@ -45,14 +45,20 @@
                     <span>Total</span>
                     <img src="./assets/total.svg" alt="">
                 </h3>
-                <p id="total-display">R$ 0,00</p>
+                <p id="total-display" class="num-display">R$ 0,00</p>
             </div>
         </section>
 
         <section id="transaction">
             <h2 class="sr-only">Transações</h2>
-
-            <a href="#" class="button new" onclick="Modal.openAddTransaction()">+ Nova Transação</a>
+            
+            <div id="transaction-buttons">
+                <a href="#" class="button new" onclick="Modal.openAddTransaction()">+ Nova Transação</a>
+                <a href="#" class="button filter" onclick="Modal.openFilterTransaction()">
+                    <img src="./assets/arrow-down.svg" alt="Arrow down">
+                    <span>Filtrar</span>
+                </a>
+            </div>
             
             <div class="transaction-table">
                 <table id="data-table">
@@ -171,6 +177,56 @@
             </div>
         </div>
     </div>
+
+    
+    <div id="filter-transaction" class="modal-overlay">
+        <div class="modal">
+            <div id="form">
+                <h2>Filtrar Transação</h2>
+                <form action="" onsubmit="Form.submit(event, 'filter')">
+                    <div class="input-group">
+                        <label for="perPage">Por Página</label>
+                        <input
+                            id="perPage"
+                            name="perPage"
+                            type="number"
+                            value="6"
+                            min="1"
+                            max="25"
+                            onchange="Paginate.updatePerPage(event)"    
+                        >
+                    </div>
+
+                    <div class="input-sub-group">
+                        <div class="input-group">
+                            <label for="initialdate">Data Inicial</label>
+                            <input id="initialDate" name="initialdate" type="date">
+                        </div>
+    
+                        <div class="input-group">
+                            <label for="finaldate">Data Final</label>
+                            <input id="finalDate" name="finaldate" type="date">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="transactionType">Tipo da Transação</label>
+                        <select name="transactionType" id="transactionType">
+                            <option value="any">Escolha algum tipo</option>
+                            <option value="income">Entrada</option>
+                            <option value="expense">Saída</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group actions">
+                        <a href="#" class="button cancel" onclick="Modal.close()">Cancelar</a>
+                        <button>Filtrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <script src="./js/index.js"></script>
 </body>
