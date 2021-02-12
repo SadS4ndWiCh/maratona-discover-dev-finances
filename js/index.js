@@ -11,7 +11,7 @@ const Modal = {
   },
 
   openFilterTransaction() {
-    document.querySelector('#filter-transaction').classList.add('active');
+    document.querySelector("#filter-transaction").classList.add("active");
   },
 
   close() {
@@ -109,22 +109,24 @@ const Transaction = {
   // Filtra as transações
   filter(initialDate, finalDate, transactionType) {
     let filteredTransactions = [...Transaction.all];
-    
-    filteredTransactions = filteredTransactions.filter(transaction => {
+
+    filteredTransactions = filteredTransactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date);
 
       // Tem a Data Inicial e Data Final
-      if(initialDate && finalDate) {
-        return transactionDate.getTime() >= initialDate && transactionDate.getDate() <= finalDate;
+      if (initialDate && finalDate) {
+        return (
+          transactionDate.getTime() >= initialDate &&
+          transactionDate.getDate() <= finalDate
+        );
 
-      // Não tem a Data Inicial e tem a Data Final
-      } else if(!initialDate && finalDate) {
+        // Não tem a Data Inicial e tem a Data Final
+      } else if (!initialDate && finalDate) {
         return transactionDate.getTime() <= finalDate;
-      
-      // Tem a Data Inicial e não tem a Data Final
-      } else if(initialDate && !finalDate) {
+
+        // Tem a Data Inicial e não tem a Data Final
+      } else if (initialDate && !finalDate) {
         return transactionDate.getTime() >= initialDate;
-      
       }
 
       // Não tem ambas
@@ -132,8 +134,10 @@ const Transaction = {
     });
 
     // Se o tipo da transação for diferente de 'any', filtre elas
-    if(transactionType !== 'any') {
-      filteredTransactions = filteredTransactions.filter(transaction => transaction.type === transactionType);
+    if (transactionType !== "any") {
+      filteredTransactions = filteredTransactions.filter(
+        (transaction) => transaction.type === transactionType
+      );
     }
 
     DOM.transactions = filteredTransactions;
@@ -331,7 +335,7 @@ const Paginate = {
     target.value = perPage;
 
     DOM.renderTransactions();
-  }
+  },
 };
 
 // Ordenar a coluna
@@ -456,7 +460,7 @@ const Utils = {
   },
 
   formatFormDateToObject(date) {
-    if(!date) return undefined;
+    if (!date) return undefined;
 
     const dateString = Utils.formatDate(date);
 
@@ -480,9 +484,9 @@ const Form = {
   dateEditField: document.querySelector("#editDate"),
   indexEditField: document.querySelector("#editIndex"),
 
-  initialDateFilter: document.querySelector('#initialDate'),
-  finalDateFilter: document.querySelector('#finalDate'),
-  transactionTypeFilter: document.querySelector('#transactionType'),
+  initialDateFilter: document.querySelector("#initialDate"),
+  finalDateFilter: document.querySelector("#finalDate"),
+  transactionTypeFilter: document.querySelector("#transactionType"),
 
   // Pega os valores dos campos
   getValuesOf(modalType) {
@@ -502,7 +506,7 @@ const Form = {
         initialDate: Form.initialDateFilter.value,
         finalDate: Form.finalDateFilter.value,
         transactionTypeFilter: Form.transactionTypeFilter.value,
-      }
+      },
     };
 
     return options[modalType];
@@ -574,8 +578,12 @@ const Form = {
         const editedTransaction = Form.formatValuesOf("edit");
 
         Transaction.edit(editedTransaction);
-      } else if(submitType === "filter") {
-        let { initialDate, finalDate, transactionTypeFilter } = Form.getValuesOf('filter');
+      } else if (submitType === "filter") {
+        let {
+          initialDate,
+          finalDate,
+          transactionTypeFilter,
+        } = Form.getValuesOf("filter");
 
         initialDate = Utils.formatFormDateToObject(initialDate);
         finalDate = Utils.formatFormDateToObject(finalDate);
