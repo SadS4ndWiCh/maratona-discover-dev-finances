@@ -109,7 +109,7 @@ const Transaction = {
   // Filtra as transações
   filter(initialDate, finalDate, transactionType) {
     let filteredTransactions = [...Transaction.all];
-
+    
     filteredTransactions = filteredTransactions.filter(transaction => {
       const transactionDate = new Date(transaction.date);
 
