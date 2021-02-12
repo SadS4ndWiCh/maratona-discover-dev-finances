@@ -116,6 +116,12 @@ body {
     cursor: pointer;
 }
 
+.num-display {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 /* Titles ==================================== */
 
 h2 {
@@ -184,10 +190,20 @@ a.button.cancel:hover {
     opacity: 1;
 }
 
-button.btn-icon {
-    width: 25px;
-    height: 25px;
+a.button.filter {
+    display: flex;
+    align-items: center;
 
+    gap: 10px;
+    
+    opacity: .6;
+}
+
+a.button.filter:hover {
+    opacity: 1;
+}
+
+button.btn-icon {
     background-color: transparent;
 }
 
@@ -279,6 +295,17 @@ html[data-theme="light"] .card.total img {
     filter: invert(1);
 }
 
+/* Transaction section ==================================== */
+
+#transaction-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+
+
 /* Table ==================================== */
 
 .transaction-table {
@@ -299,6 +326,11 @@ table th button {
     display: flex;
     align-items: center;
 
+    width: 100%;
+    height: 100%;
+
+    padding: 1rem 0;
+
     font-weight: normal;
     font-family: 'Poppins';
     font-size: 14px;
@@ -311,9 +343,13 @@ table th button span {
 }
 
 table th {
-    padding: 1rem 2rem;
+    padding: 0 2rem;
 
     background-color: var(--global-table-bg-color);
+}
+
+table th button {
+    width: 100%;
 }
 
 table td {
@@ -482,6 +518,12 @@ html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
+.input-sub-group {
+    display: flex;
+
+    gap: 15px;
+}
+
 .input-group {
     margin-top: .8rem;
 }
@@ -516,7 +558,24 @@ html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
     color: var(--global-save-button-color);
 }
 
+.input-group select {
+    width: 100%;
+    padding: .8rem;
+
+    border: none;
+    border-radius: .2rem;
+
+    color: var(--global-input-color);
+    background-color: var(--global-input-bg-color);
+}
+
 /* Responsive ==================================== */
+
+@media (max-width: 500px) {
+    .input-sub-group {
+        display: block;
+    }
+}
 
 @media (min-width: 800px) {
     html {
@@ -529,5 +588,3 @@ html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
         gap: 2rem;
     }
 }
-
-
