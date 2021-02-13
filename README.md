@@ -10,6 +10,6 @@
 
 # Dev Finances
 
-![Resultado Final](https://i.gyazo.com/c0b79a73f001baa98721ab03eb4817ae.png)
+![Resultado Final](https://i.gyazo.com/38cffd4047f5fc69772d7bfa64499393.png)
 
 Esse projeto é da [Maratona Discover](https://maratonadiscover.rocketseat.com.br/maratona/aula-01) da [Rocketseat](https://github.com/Rocketseat), no qual consiste em administrar suas finanças.
