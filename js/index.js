@@ -438,10 +438,17 @@ const Utils = {
 
     value = String(value).replace(/\D/g, "");
     value = Number(value) / 100;
-    value = value.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
+
+    // Criando o objeto de como o número será formatado
+    const o = Intl.NumberFormat("pt-BR", {
+      style: "currency", // O estilo é de moeda
+      currency: "BRL", // Moeda Real Brasileira
+      maximumFractionDigits: 2, // Máximo de números após a vírgula
+      notation: "compact", // Usando uma notação compacta para compactar números grandes
     });
+    
+    // Enfim formatando
+    value = o.format(value); 
 
     return `${signal} ${value}`;
   },
