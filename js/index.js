@@ -176,6 +176,27 @@ const Transaction = {
     // Entradas - Saídas
     return Transaction.incomes() + Transaction.expenses();
   },
+
+  // Exporta os dados para csv
+  export() {
+    // Converte as transações em string de estilo csv 
+    const csvTransactions = Utils.transactionsToCSV(Transaction.all);
+    // Transforma a string em URI
+    const encodedUri = encodeURI(csvTransactions);
+    
+    // Cria o elemento de Âncora e adiciona atributos e classes necessárias
+    const link = document.createElement('a');
+    link.classList.add('sr-only');
+    link.setAttribute('href', encodedUri);
+    link.download = 'transactions.csv'; // Para dar um nome específico ao arquivo
+
+    // Adiciona ele no body
+    document.body.appendChild(link);
+    // Faz com que clique automaticamente para baixar
+    link.click();
+    // Remove elemento do body
+    document.body.removeChild(link);
+  },
 };
 
 // Métodos para manipular os dados visíveis
@@ -477,6 +498,16 @@ const Utils = {
   formatDateToLocale(date, locale) {
     const convertedDate = new Date(date);
     return convertedDate.toLocaleDateString(locale);
+  },
+
+  transactionsToCSV(transactions) {
+    let csvContent = 'data:text/csv;charset=utf-8,description, amount, date, type\r\n';
+
+    transactions.forEach(({ description, amount, date, type }) => {
+      csvContent += `${description}, ${amount}, ${date}, ${type}\r\n`;
+    });
+
+    return csvContent;
   },
 };
 
