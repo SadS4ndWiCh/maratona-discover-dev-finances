@@ -159,6 +159,22 @@ button {
 button:hover {
     opacity: .6;
 }
+
+.btn-export {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    width: 100px;
+    height: 30px;
+}
+
+.btn-export img {
+    width: 10px;
+}
+
 .button.new {
     display: inline-block;
 
@@ -207,16 +223,7 @@ button.btn-icon {
     background-color: transparent;
 }
 
-/* Header ==================================== */
-
-header {
-    padding: 2rem 0 10rem;
-
-    text-align: center;
-    background-color: var(--global-header-bg-color);
-}
-
-header .theme-switch {
+.theme-switch {
     position: absolute;
     top: 1.2rem;
     right: 1.2rem;
@@ -235,9 +242,26 @@ header .theme-switch {
     cursor: pointer;
 }
 
-header .theme-switch:hover {
+.theme-switch:hover {
     background-color: rgba(255, 255, 255, .02);
 }
+
+
+/* Header ==================================== */
+
+header {
+    padding: 2rem 0 10rem;
+
+    text-align: center;
+    background-color: var(--global-header-bg-color);
+}
+
+header .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 
 #logo {
     font-weight: 100;
