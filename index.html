@@ -14,7 +14,13 @@
   </head>
   <body>
     <header>
-      <img src="./assets/logo.svg" alt="Logo Dev Finance" />
+      <div class="container header-content">
+        <img src="./assets/logo.svg" alt="Logo Dev Finance" />
+  
+        <div class="export-transactions">
+          <button class="btn-export" onclick="Transaction.export()"><img src="./assets/export.svg" alt="Export icon"> Exportar</button>
+        </div>
+      </div>
 
       <div class="theme-switch" onclick="Theme.toggleLightDark()">
         <img src="./assets/theme.svg" alt="Theme icon" />
