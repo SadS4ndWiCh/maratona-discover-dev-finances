@@ -501,10 +501,12 @@ const Utils = {
   },
 
   transactionsToCSV(transactions) {
-    let csvContent = 'data:text/csv;charset=utf-8,description, amount, date, type\r\n';
+    let csvContent = 'data:text/csv;charset=utf-8,description;amount;date;type\r\n';
 
     transactions.forEach(({ description, amount, date, type }) => {
-      csvContent += `${description}, ${amount}, ${date}, ${type}\r\n`;
+      date = Utils.formatDateToLocale(date, 'pt-BR');
+      
+      csvContent += `${description};${amount/100};${date};${type}\r\n`;
     });
 
     return csvContent;
